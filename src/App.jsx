@@ -11,6 +11,7 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import ServicesPage from '@/pages/ServicesPage';
+import AboutUsPage from '@/pages/AboutUsPage';
 import ContactPage from '@/pages/ContactPage';
 import UserDashboard from '@/pages/UserDashboard';
 import AdminDashboard from '@/pages/AdminDashboard';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/aboutus" element={<AboutUsPage />} />
            <Route
             path="/admin/verifications"
             element={

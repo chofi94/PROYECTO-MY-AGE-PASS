@@ -117,7 +117,7 @@ const UserDashboard = () => {
                 
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="bg-slate-700/50 rounded-lg p-4">
-                    <p className="text-slate-400 text-sm mb-1">Status</p>
+                    <p className="text-slate-400 text-sm mb-1">Estado</p>
                     <div className="flex items-center gap-2">
                       {user?.verified ? (
                         <>
@@ -173,7 +173,7 @@ const UserDashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <h2 className="text-2xl font-bold text-white mb-4">Verification History</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">Historial de operaciones</h2>
               <Card>
                 {loading ? (
                   <div className="py-12 flex justify-center">
@@ -184,10 +184,10 @@ const UserDashboard = () => {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-slate-700">
-                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Type</th>
-                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Document</th>
-                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Status</th>
-                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Date</th>
+                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Tipo</th>
+                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Documento</th>
+                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Estado</th>
+                          <th className="text-left py-3 px-4 text-slate-400 font-medium">Fecha</th>
                         </tr>
                       </thead>
                       <tbody>

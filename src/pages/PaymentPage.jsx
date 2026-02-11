@@ -87,7 +87,7 @@ const PaymentPage = () => {
   return (
     <>
       <Helmet>
-        <title>Payment - SecureVerify</title>
+        <title>My Age Pass</title>
         <meta name="description" content="Complete your payment to activate your SecureVerify subscription" />
       </Helmet>
 
@@ -102,11 +102,10 @@ const PaymentPage = () => {
               className="mb-8 text-center"
             >
               <h1 className="text-4xl font-bold text-white mb-2">
-                Complete Your Payment
+                Completa tu pago
               </h1>
               <p className="text-slate-400">
-                Secure payment powered by industry-leading encryption
-              </p>
+                Pago seguro con encriptación líder en el sector              </p>
             </motion.div>
 
             <div className="grid lg:grid-cols-3 gap-8">
@@ -120,7 +119,7 @@ const PaymentPage = () => {
                 <Card>
                   <div className="flex items-center gap-2 mb-6">
                     <Lock className="w-5 h-5 text-green-500" />
-                    <span className="text-sm text-slate-400">Secure SSL Encrypted Payment</span>
+                    <span className="text-sm text-slate-400">Pago seguro con cifrado SSL</span>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -180,13 +179,13 @@ const PaymentPage = () => {
                       ) : (
                         <>
                           <CreditCard className="w-5 h-5 mr-2" />
-                          Pay {selectedPlan.price}{selectedPlan.period}
+                          Pagar {selectedPlan.price}{selectedPlan.period}
                         </>
                       )}
                     </Button>
 
                     <p className="text-sm text-slate-400 text-center">
-                      By confirming your subscription, you agree to our Terms of Service
+                      Al confirmar tu suscripción, aceptas nuestros términos de servicio.
                     </p>
                   </form>
                 </Card>

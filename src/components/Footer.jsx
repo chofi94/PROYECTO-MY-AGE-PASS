@@ -13,57 +13,57 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Shield className="w-6 h-6 text-blue-500" />
-              <span className="text-lg font-bold text-white">SecureVerify</span>
+              <span className="text-lg font-bold text-white">My Age Pass</span>
             </div>
             <p className="text-slate-400 text-sm">
-              Leading provider of NFC verification and secure identity solutions for businesses worldwide.
+              Proveedor líder de soluciones de verificación NFC e identidad segura para empresas de todo el mundo.
             </p>
           </div>
 
           <div>
-            <span className="text-white font-semibold block mb-4">Quick Links</span>
+            <span className="text-white font-semibold block mb-4">Enlaces rápidos</span>
             <div className="flex flex-col gap-2">
               <Link to="/" className="text-slate-400 hover:text-white transition-colors text-sm">
-                Home
+                Inicio
               </Link>
               <Link to="/services" className="text-slate-400 hover:text-white transition-colors text-sm">
-                Services
+                Servicios
               </Link>
               <Link to="/contact" className="text-slate-400 hover:text-white transition-colors text-sm">
-                Contact
+                Contacto
               </Link>
             </div>
           </div>
 
           <div>
-            <span className="text-white font-semibold block mb-4">Legal</span>
+            <span className="text-white font-semibold block mb-4">Términos legales</span>
             <div className="flex flex-col gap-2">
               <Link to="/privacy" className="text-slate-400 hover:text-white transition-colors text-sm">
-                Privacy Policy
+                Política de privacidad
               </Link>
               <Link to="/terms" className="text-slate-400 hover:text-white transition-colors text-sm">
-                Terms of Service
+                Términos de servicio
               </Link>
               <Link to="/compliance" className="text-slate-400 hover:text-white transition-colors text-sm">
-                Compliance
+                Cumplimiento normativo
               </Link>
             </div>
           </div>
 
           <div>
-            <span className="text-white font-semibold block mb-4">Contact Us</span>
+            <span className="text-white font-semibold block mb-4">Contacta con nosotros</span>
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-slate-400 text-sm">
                 <Mail className="w-4 h-4" />
-                <span>contact@secureverify.com</span>
+                <span>contact@myagepass.com</span>
               </div>
               <div className="flex items-center gap-2 text-slate-400 text-sm">
                 <Phone className="w-4 h-4" />
-                <span>+1 (555) 123-4567</span>
+                <span>967 30 34 35</span>
               </div>
               <div className="flex items-center gap-2 text-slate-400 text-sm">
                 <MapPin className="w-4 h-4" />
-                <span>123 Security Blvd, Tech City</span>
+                <span>Madrid, ESPAÑA</span>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ const Footer = () => {
 
         <div className="border-t border-slate-800 mt-8 pt-8 text-center">
           <p className="text-slate-500 text-sm">
-            © {currentYear} SecureVerify. All rights reserved.
+            © {currentYear} My Age Pass. Todos los derechos reservados.
           </p>
         </div>
       </div>

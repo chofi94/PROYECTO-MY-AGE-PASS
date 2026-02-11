@@ -19,10 +19,10 @@ const Header = () => {
   };
 
   const publicLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'Contact', path: '/contact' },
-    { name: 'About us', path: '/aboutus' }
+    { name: 'Inicio', path: '/' },
+    { name: 'Servicios', path: '/services' },
+    { name: 'Sobre nosotros', path: '/aboutus' },
+    { name: 'Contacto', path: '/contact' }
   ];
 
   return (
@@ -31,7 +31,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <Shield className="w-8 h-8 text-blue-500" />
-            <span className="text-xl font-bold text-white">SecureVerify</span>
+            <span className="text-xl font-bold text-white">My Age Pass</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -88,7 +88,7 @@ const Header = () => {
                       className="flex items-center gap-2 px-4 py-3 hover:bg-slate-700 transition-colors w-full text-left text-red-400"
                     >
                       <LogOut className="w-4 h-4" />
-                      Logout
+                      Cerrar sesión
                     </button>
                   </motion.div>
                 )}
@@ -97,12 +97,12 @@ const Header = () => {
               <>
                 <Link to="/login">
                   <Button variant="ghost" className="text-white">
-                    Login
+                    Iniciar sesión
                   </Button>
                 </Link>
                 <Link to="/register">
                   <Button className="bg-blue-600 hover:bg-blue-700">
-                    Get Started
+                    Registrarse
                   </Button>
                 </Link>
               </>
@@ -150,14 +150,14 @@ const Header = () => {
                     className="block py-2 text-slate-300 hover:text-white transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Admin Panel
+                    Panel de administración
                   </Link>
                 )}
                 <button
                   onClick={handleLogout}
                   className="block py-2 text-red-400 hover:text-red-300 transition-colors w-full text-left"
                 >
-                  Logout
+                  Cerra sesión
                 </button>
               </>
             ) : (
@@ -167,14 +167,14 @@ const Header = () => {
                   className="block py-2 text-slate-300 hover:text-white transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Login
+                  Iniciar sesión
                 </Link>
                 <Link
                   to="/register"
                   className="block py-2 text-blue-500 hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Get Started
+                  Registrarse
                 </Link>
               </>
             )}

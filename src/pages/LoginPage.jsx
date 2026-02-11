@@ -73,7 +73,7 @@ const LoginPage = () => {
   return (
     <>
       <Helmet>
-        <title>Login - SecureVerify</title>
+        <title>My Age Pass</title>
         <meta name="description" content="Login to your SecureVerify account to access secure identity verification services" />
       </Helmet>
 
@@ -90,10 +90,10 @@ const LoginPage = () => {
             </div>
 
             <h1 className="text-3xl font-bold text-center text-white mb-2">
-              Welcome Back
+              Bienvenido de nuevo
             </h1>
             <p className="text-slate-400 text-center mb-8">
-              Login to your SecureVerify account
+              Inicia sesión con tu cuenta de My Age Pass
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -120,10 +120,10 @@ const LoginPage = () => {
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 text-sm text-slate-400">
                   <input type="checkbox" className="rounded border-slate-600" />
-                  Remember me
+                  Recuérdame
                 </label>
                 <Link to="/forgot-password" className="text-sm text-blue-400 hover:text-blue-300">
-                  Forgot password?
+                  ¿Has olvidado tu contraseña?
                 </Link>
               </div>
 
@@ -141,7 +141,7 @@ const LoginPage = () => {
                 <div className="w-full border-t border-slate-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-800 text-slate-400">Or continue with</span>
+                <span className="px-2 bg-slate-800 text-slate-400">Inicia sesión con:</span>
               </div>
             </div>
 
@@ -157,22 +157,17 @@ const LoginPage = () => {
                 <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                 <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
-              Sign in with Google
+              Inicia sesión con Google
             </Button>
 
             <p className="text-center text-slate-400 text-sm mt-6">
-              Don't have an account?{' '}
+              ¿No tienes cuenta?{' '}
               <Link to="/register" className="text-blue-400 hover:text-blue-300 font-medium">
-                Sign up
+                Regístrate aquí
               </Link>
             </p>
 
-            <div className="mt-6 p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
-              <p className="text-sm text-blue-300 text-center">
-                Demo: demo@example.com / password (user)<br/>
-                Admin: admin@example.com / admin
-              </p>
-            </div>
+           
           </div>
         </motion.div>
       </div>

@@ -63,18 +63,7 @@ const HomePage = () => {
                 
 
                 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link to="/register">
-                    <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8">
-                      Get Started Free
-                    </Button>
-                  </Link>
-                  <Link to="/services">
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8">
-                      Learn More
-                    </Button>
-                  </Link>
-                </div>
+              
               </motion.div>
 
               <motion.div
@@ -92,8 +81,8 @@ const HomePage = () => {
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-8 h-8 text-white" />
                     <div>
-                      <p className="text-white font-bold text-lg">99.9% Accuracy</p>
-                      <p className="text-blue-100 text-sm">Verified Results</p>
+                      <p className="text-white font-bold text-lg">99.9% de precisión</p>
+                      <p className="text-blue-100 text-sm">Resultados verificados</p>
                     </div>
                   </div>
                 </div>
@@ -112,11 +101,10 @@ const HomePage = () => {
               className="text-center mb-16"
             >
               <h2 className="text-4xl font-bold text-white mb-4">
-                Why Choose SecureVerify?
+                ¿Porqué elegir My Age Pass?
               </h2>
               <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-                Industry-leading verification technology trusted by thousands of businesses worldwide
-              </p>
+                Tecnología de verificación líder en el sector en la que confían miles de empresas de todo el mundo.              </p>
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -148,7 +136,7 @@ const HomePage = () => {
           <div className="container mx-auto max-w-6xl">
             <div className="grid md:grid-cols-3 gap-8">
               {[
-                { value: '2M+', label: 'Verifications Processed' },
+                { value: '2M', label: 'Verifications Processed' },
                 { value: '10K+', label: 'Active Businesses' },
                 { value: '99.9%', label: 'Uptime Guarantee' }
               ].map((stat, index) => (
@@ -181,20 +169,20 @@ const HomePage = () => {
               viewport={{ once: true }}
             >
               <h2 className="text-4xl font-bold text-white mb-6">
-                Ready to Secure Your Business?
+                ¿Preparado para proteger tu negocio?
               </h2>
               <p className="text-xl text-slate-200 mb-8">
-                Join thousands of companies using SecureVerify for their identity verification needs
+                Únte a miles de empresas que utilizan My Age Pass para cualquiera de tus necesidades de verificación de identidad.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/register">
                   <Button size="lg" className="bg-white text-blue-900 hover:bg-slate-100 text-lg px-8">
-                    Start Free Trial
+                    Regístrate aquí
                   </Button>
                 </Link>
                 <Link to="/contact">
                   <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8">
-                    Contact Sales
+                    Contacta con nosotros
                   </Button>
                 </Link>
               </div>
