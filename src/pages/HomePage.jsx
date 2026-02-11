@@ -36,7 +36,7 @@ const HomePage = () => {
   return (
     <>
       <Helmet>
-        <title>SecureVerify - Advanced NFC Identity Verification Solutions</title>
+        <title>My Age Pass</title>
         <meta name="description" content="Secure identity verification platform with NFC technology, document validation, and global compliance. Trusted by businesses worldwide." />
       </Helmet>
 
@@ -55,11 +55,14 @@ const HomePage = () => {
                 transition={{ duration: 0.8 }}
               >
                 <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                  Secure Identity Verification Made Simple
+                  Verificación rapida. Compra inteligente.
                 </h1>
                 <p className="text-xl text-slate-300 mb-8">
-                  Advanced NFC technology and AI-powered document validation to protect your business and build trust with your customers.
+                  Verifica la edad con confianza y facilidad utilizando MyAgePass
                 </p>
+                
+
+                
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link to="/register">
                     <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8">
