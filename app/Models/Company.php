@@ -40,4 +40,12 @@ class Company extends Model
     {
         return $this->hasMany(Machine::class);
     }
+
+    public function operations() 
+    {
+        return $this->hasMany(Operation::class);
+
+    }
+
+
 }

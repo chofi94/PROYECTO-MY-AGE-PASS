@@ -3,31 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Company; // Añadido
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB; // Añadido para seguridad
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        // 1. Añadimos 'cif' a la validación
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'company_name' => 'required|string|max:255|unique:companies,name',
+            'cif' => 'required|string|max:20|unique:companies,cif',
+            'address' => 'required|string|max:255'
         ]);
 
-        // Usamos una transacción para que se cree TODO o NADA
         return DB::transaction(function () use ($request) {
             
-            // 1. Crear empresa
+            // 2. Crear empresa incluyendo el CIF
             $company = Company::create([
                 'name' => $request->company_name,
+                'cif'  => $request->cif, 
+                'address' => $request->address 
             ]);
 
-            // 2. Crear usuario
+            // 3. Crear usuario
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -36,8 +40,13 @@ class AuthController extends Controller
                 'role' => 'client', 
             ]);
 
+            // 4. GENERAR TOKEN
+            $token = $user->createToken('auth_token')->plainTextToken;
+
             return response()->json([
                 'message' => 'Registro completado con éxito.',
+                'access_token' => $token,
+                'token_type' => 'Bearer',
                 'user' => $user->load('company')
             ], 201);
         });
@@ -56,12 +65,13 @@ class AuthController extends Controller
             return response()->json(['message' => 'Credenciales incorrectas'], 401);
         }
 
+        $user->tokens()->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user->load('company') // Es mejor enviar la empresa también en el login
+            'user' => $user->load('company')
         ]);
     }
 
@@ -71,9 +81,6 @@ class AuthController extends Controller
     }
 
     public function userInfo(Request $request) {
-        return response()->json([
-            'user' => $request->user(),
-            'company' => $request->user()->company 
-        ]);
+        return response()->json($request->user()->load('company'));
     }
 }

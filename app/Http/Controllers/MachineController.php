@@ -4,64 +4,61 @@ namespace App\Http\Controllers;
 
 use App\Models\Machine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str; // Para generar el token
 
 class MachineController extends Controller
 {
-    /**
-     * Listar máquinas según el rol.
-     */
     public function index(Request $request)
     {
         $user = $request->user();
 
         if ($user->role === 'admin') {
-            // El admin ve todas las máquinas y a qué empresa pertenecen
             return response()->json(Machine::with('company')->get());
         }
 
-        // El cliente solo ve las máquinas de su empresa
         return response()->json(Machine::where('company_id', $user->company_id)->get());
     }
 
-    /**
-     * Guardar una nueva máquina.
-     */
     public function store(Request $request)
     {
+        $user = $request->user();
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string',
             'location' => 'nullable|string',
             'status' => 'required|in:active,inactive,maintenance',
-            'company_id' => 'required|exists:companies,id',
+            // Si es admin, el company_id es obligatorio. Si es cliente, usamos el suyo.
+            'company_id' => $user->role === 'admin' ? 'required|exists:companies,id' : 'nullable',
         ]);
 
-        // Seguridad: Si no es admin, solo puede crear máquinas para SU empresa
-        if ($request->user()->role !== 'admin' && $request->user()->company_id != $validated['company_id']) {
-            return response()->json(['message' => 'No puedes crear máquinas para otra empresa'], 403);
-        }
+        // Asignamos el company_id automáticamente si es un cliente
+        $companyId = $user->role === 'admin' ? $validated['company_id'] : $user->company_id;
 
-        $machine = Machine::create($validated);
+        $machine = Machine::create([
+            'name' => $validated['name'],
+            'type' => $validated['type'],
+            'location' => $validated['location'],
+            'status' => $validated['status'],
+            'company_id' => $companyId,
+            'nfc_token' => Str::random(32), // GENERAMOS EL TOKEN AQUÍ
+        ]);
 
-        return response()->json($machine, 201);
+        return response()->json([
+            'message' => 'Máquina creada con éxito',
+            'machine' => $machine
+        ], 201);
     }
 
-    /**
-     * Ver una máquina concreta.
-     */
     public function show(Request $request, Machine $machine)
     {
-        // Comprobar si el usuario tiene permiso para ver ESTA máquina
         if ($request->user()->role !== 'admin' && $request->user()->company_id !== $machine->company_id) {
-            return response()->json(['message' => 'No tienes acceso a esta máquina'], 403);
+            return response()->json(['message' => 'No tienes acceso'], 403);
         }
 
         return response()->json($machine->load('company'));
     }
 
-    /**
-     * Actualizar datos (ubicación, estado...).
-     */
     public function update(Request $request, Machine $machine)
     {
         if ($request->user()->role !== 'admin' && $request->user()->company_id !== $machine->company_id) {
@@ -76,13 +73,9 @@ class MachineController extends Controller
         ]);
 
         $machine->update($validated);
-
         return response()->json($machine);
     }
 
-    /**
-     * Borrar máquina.
-     */
     public function destroy(Request $request, Machine $machine)
     {
         if ($request->user()->role !== 'admin' && $request->user()->company_id !== $machine->company_id) {
@@ -90,6 +83,20 @@ class MachineController extends Controller
         }
 
         $machine->delete();
-        return response()->json(['message' => 'Máquina eliminada correctamente']);
+        return response()->json(['message' => 'Máquina eliminada']);
+    }
+
+    /**
+     * Método extra para que el cliente vea solo sus máquinas
+     * Útil si lo llamas desde /api/companies/{id}/machines
+     */
+    public function getCompaniesMachines(Request $request, $companyId)
+    {
+        if ($request->user()->role !== 'admin' && $request->user()->company_id != $companyId) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $machines = Machine::where('company_id', $companyId)->get();
+        return response()->json($machines);
     }
 }

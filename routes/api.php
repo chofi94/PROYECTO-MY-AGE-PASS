@@ -8,6 +8,7 @@ use App\Http\Controllers\MachineController;
 use App\Http\Controllers\VerificationsController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\ContactController; 
+use App\Http\Controllers\OperationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +56,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // --- CONTACTOS (Gestión de mensajes recibidos) ---
     // Solo permitimos ver, listar y borrar. El 'store' ya es público arriba.
     Route::apiResource('contact', ContactController::class)->except(['store']);
+
+    Route::get('/operations', [OperationController::class, 'index']);
 });

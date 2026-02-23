@@ -6,7 +6,7 @@ use App\Models\Verification;
 use App\Models\Machine;
 use Illuminate\Http\Request;
 
-class VerificationsController extends Controller
+class VerificationsController extends Controller // Cambiado a singular
 {
     /**
      * Listar el historial de verificaciones.
@@ -15,12 +15,10 @@ class VerificationsController extends Controller
     {
         $user = $request->user();
 
-        // El Admin ve absolutamente todo el historial del sistema
         if ($user->role === 'admin') {
             return response()->json(Verification::with('machine.company')->latest()->get());
         }
 
-        // El Cliente solo ve los escaneos de SUS máquinas
         return response()->json(
             Verification::whereHas('machine', function($query) use ($user) {
                 $query->where('company_id', $user->company_id);
@@ -29,35 +27,45 @@ class VerificationsController extends Controller
     }
 
     /**
-     * Registrar un nuevo escaneo (Esta ruta la llamará la máquina física).
+     * Registrar un nuevo escaneo (Hardware NFC).
      */
     public function store(Request $request)
     {
+        // 1. Validamos los campos según nuestra nueva estructura de DB
         $validated = $request->validate([
-            'machine_id' => 'required|exists:machines,id',
-            'result'     => 'required|in:success,failed',
-            'metadata'   => 'nullable|array',
+            'machine_id'    => 'required|exists:machines,id',
+            'document_type' => 'required|string', 
+            'detected_age'  => 'required|integer',
+            'result'        => 'required|in:success,failed',
+            'metadata'      => 'nullable|array',
         ]);
 
-        $verification = Verifications::create([
-            'machine_id' => $validated['machine_id'],
-            'result'     => $validated['result'],
-            'scanned_at' => now(), // Registramos el momento exacto
-            'metadata'   => isset($validated['metadata']) ? json_encode($validated['metadata']) : null,
+        // 2. Lógica de negocio: ¿Es mayor de edad?
+        $isAdult = $validated['detected_age'] >= 18;
+
+        // 3. Crear el registro (Usando el modelo en SINGULAR: Verification)
+        $verification = Verification::create([
+            'machine_id'    => $validated['machine_id'],
+            'document_type' => $validated['document_type'],
+            'is_adult'      => $isAdult,
+            'detected_age'  => $validated['detected_age'],
+            'result'        => $validated['result'],
+            'scanned_at'    => now(),
+            'metadata'      => $validated['metadata'], // Laravel lo convierte a JSON automáticamente si está en $casts
         ]);
 
         return response()->json([
-            'message' => 'Escaneo registrado',
-            'id' => $verification->id
+            'message'        => 'Escaneo registrado',
+            'access_granted' => $isAdult,
+            'id'             => $verification->id
         ], 201);
     }
 
     /**
-     * Ver detalle de una verificación específica.
+     * Ver detalle de una verificación.
      */
-    public function show(Request $request, Verifications $verification)
+    public function show(Request $request, Verification $verification)
     {
-        // Comprobar que la verificación pertenece a una máquina de la empresa del usuario
         $machine = $verification->machine;
         
         if ($request->user()->role !== 'admin' && $request->user()->company_id !== $machine->company_id) {
@@ -68,12 +76,12 @@ class VerificationsController extends Controller
     }
 
     /**
-     * Eliminar registros (Generalmente solo el Admin debería poder limpiar el historial).
+     * Eliminar registros (Solo Admin).
      */
-    public function destroy(Request $request, Verifications $verification)
+    public function destroy(Request $request, Verification $verification)
     {
         if ($request->user()->role !== 'admin') {
-            return response()->json(['message' => 'Solo el administrador puede borrar historiales'], 403);
+            return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
         $verification->delete();
