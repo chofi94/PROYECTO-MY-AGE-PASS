@@ -1,6 +1,4 @@
-
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as authService from '@/api/authService';
 
 export const AuthContext = createContext(null);
@@ -12,26 +10,27 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    validateToken();
-  }, []);
-
-  const validateToken = async () => {
-    setLoading(true);
-    try {
+    const initAuth = async () => {
       const token = localStorage.getItem('authToken');
-      if (token) {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
         const userData = await authService.validateToken(token);
         setUser(userData);
         setIsAuthenticated(true);
+      } catch (err) {
+        localStorage.removeItem('authToken');
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      localStorage.removeItem('authToken');
-      setUser(null);
-      setIsAuthenticated(false);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    initAuth();
+  }, []);
 
   const login = async (email, password) => {
     setLoading(true);
@@ -43,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       return response;
     } catch (err) {
-      setError(err.message || 'Login failed');
+      setError(err.response?.data?.message || 'Error al iniciar sesión');
       throw err;
     } finally {
       setLoading(false);
@@ -60,24 +59,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       return response;
     } catch (err) {
-      setError(err.message || 'Registration failed');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loginWithGoogle = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await authService.loginWithGoogle();
-      localStorage.setItem('authToken', response.token);
-      setUser(response.user);
-      setIsAuthenticated(true);
-      return response;
-    } catch (err) {
-      setError(err.message || 'Google login failed');
+      setError(err.response?.data?.message || 'Error en el registro');
       throw err;
     } finally {
       setLoading(false);
@@ -85,6 +67,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    const token = localStorage.getItem('authToken');
+    authService.logout(token).catch(() => {}); // Intentamos avisar al backend
     localStorage.removeItem('authToken');
     setUser(null);
     setIsAuthenticated(false);
@@ -99,7 +83,6 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     register,
-    loginWithGoogle,
     setError
   };
 

@@ -1,13 +1,12 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, User, LogOut, Shield, Settings } from 'lucide-react';
+import { Menu, X, User, LogOut, Shield } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 
 const Header = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, loading } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -37,149 +36,54 @@ const Header = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {publicLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className="text-slate-300 hover:text-white transition-colors"
-              >
+              <Link key={link.path} to={link.path} className="text-slate-300 hover:text-white transition-colors">
                 {link.name}
               </Link>
             ))}
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons - Solo se muestran si NO está cargando */}
           <div className="hidden md:flex items-center gap-4">
-            {isAuthenticated ? (
-              <div className="relative">
-                <button
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
-                >
-                  <User className="w-5 h-5" />
-                  <span>{user?.name || 'User'}</span>
-                </button>
-
-                {isProfileOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-xl border border-slate-700 overflow-hidden"
+            {!loading && (
+              isAuthenticated ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-white"
                   >
-                    <Link
-                      to="/dashboard"
-                      className="flex items-center gap-2 px-4 py-3 hover:bg-slate-700 transition-colors"
-                      onClick={() => setIsProfileOpen(false)}
+                    <User className="w-5 h-5" />
+                    <span>{user?.name || 'Usuario'}</span>
+                  </button>
+
+                  {isProfileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-xl border border-slate-700 overflow-hidden"
                     >
-                      <User className="w-4 h-4" />
-                      Dashboard
-                    </Link>
-                    {user?.role === 'admin' && (
-                      <Link
-                        to="/admin"
-                        className="flex items-center gap-2 px-4 py-3 hover:bg-slate-700 transition-colors"
-                        onClick={() => setIsProfileOpen(false)}
-                      >
-                        <Shield className="w-4 h-4" />
-                        Admin Panel
+                      <Link to="/dashboard" className="flex items-center gap-2 px-4 py-3 hover:bg-slate-700 transition-colors text-white" onClick={() => setIsProfileOpen(false)}>
+                        <User className="w-4 h-4" /> Dashboard
                       </Link>
-                    )}
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center gap-2 px-4 py-3 hover:bg-slate-700 transition-colors w-full text-left text-red-400"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Cerrar sesión
-                    </button>
-                  </motion.div>
-                )}
-              </div>
-            ) : (
-              <>
-                <Link to="/login">
-                  <Button variant="ghost" className="text-white">
-                    Iniciar sesión
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    Registrarse
-                  </Button>
-                </Link>
-              </>
+                      <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-3 hover:bg-slate-700 transition-colors w-full text-left text-red-400">
+                        <LogOut className="w-4 h-4" /> Cerrar sesión
+                      </button>
+                    </motion.div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Link to="/login"><Button variant="ghost" className="text-white">Iniciar sesión</Button></Link>
+                  <Link to="/register"><Button className="bg-blue-600 hover:bg-blue-700 text-white">Registrarse</Button></Link>
+                </>
+              )
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-white"
-          >
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-white">
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="md:hidden mt-4 pb-4 border-t border-slate-800 pt-4"
-          >
-            {publicLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className="block py-2 text-slate-300 hover:text-white transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
-            {isAuthenticated ? (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="block py-2 text-slate-300 hover:text-white transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                {user?.role === 'admin' && (
-                  <Link
-                    to="/admin"
-                    className="block py-2 text-slate-300 hover:text-white transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Panel de administración
-                  </Link>
-                )}
-                <button
-                  onClick={handleLogout}
-                  className="block py-2 text-red-400 hover:text-red-300 transition-colors w-full text-left"
-                >
-                  Cerra sesión
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="block py-2 text-slate-300 hover:text-white transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Iniciar sesión
-                </Link>
-                <Link
-                  to="/register"
-                  className="block py-2 text-blue-500 hover:text-blue-400 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Registrarse
-                </Link>
-              </>
-            )}
-          </motion.div>
-        )}
       </nav>
     </header>
   );

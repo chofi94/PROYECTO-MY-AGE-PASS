@@ -1,111 +1,45 @@
+import axios from 'axios';
 
-const API_BASE_URL = 'https://api.example.com'; // Replace with actual API URL
+const API_BASE_URL = 'http://localhost:8000/api'; // Cambia esto por tu URL de producción luego
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }
+});
 
 export const login = async (email, password) => {
-  // Simulate API call - replace with actual implementation
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (email === 'demo@example.com' && password === 'password') {
-        resolve({
-          token: 'demo-token-' + Date.now(),
-          user: {
-            id: '1',
-            email: 'demo@example.com',
-            name: 'Demo User',
-            role: 'user',
-            verified: true
-          }
-        });
-      } else if (email === 'admin@example.com' && password === 'admin') {
-        resolve({
-          token: 'admin-token-' + Date.now(),
-          user: {
-            id: '2',
-            email: 'admin@example.com',
-            name: 'Admin User',
-            role: 'admin',
-            verified: true
-          }
-        });
-      } else {
-        reject(new Error('Invalid email or password'));
-      }
-    }, 1000);
-  });
+  const response = await api.post('/login', { email, password });
+  // Laravel devuelve: { user: {...}, access_token: "..." }
+  return {
+    token: response.data.access_token,
+    user: response.data.user
+  };
 };
 
 export const register = async (userData) => {
-  // Simulate API call - replace with actual implementation
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        token: 'new-token-' + Date.now(),
-        user: {
-          id: Date.now().toString(),
-          email: userData.email,
-          name: userData.fullName,
-          role: 'user',
-          verified: false
-        }
-      });
-    }, 1000);
-  });
-};
-
-export const loginWithGoogle = async () => {
-  // Prepare for Google OAuth integration
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        token: 'google-token-' + Date.now(),
-        user: {
-          id: 'google-' + Date.now(),
-          email: 'user@gmail.com',
-          name: 'Google User',
-          role: 'user',
-          verified: true
-        }
-      });
-    }, 1000);
-  });
+  const response = await api.post('/register', userData);
+  return {
+    token: response.data.access_token,
+    user: response.data.user
+  };
 };
 
 export const validateToken = async (token) => {
-  // Simulate token validation - replace with actual implementation
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (token && token.startsWith('demo-token')) {
-        resolve({
-          id: '1',
-          email: 'demo@example.com',
-          name: 'Demo User',
-          role: 'user',
-          verified: true
-        });
-      } else if (token && token.startsWith('admin-token')) {
-        resolve({
-          id: '2',
-          email: 'admin@example.com',
-          name: 'Admin User',
-          role: 'admin',
-          verified: true
-        });
-      } else if (token) {
-        resolve({
-          id: '3',
-          email: 'user@example.com',
-          name: 'Regular User',
-          role: 'user',
-          verified: false
-        });
-      } else {
-        reject(new Error('Invalid token'));
-      }
-    }, 500);
+  const response = await api.get('/user', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   });
+  return response.data; // Devuelve el objeto user
 };
 
-export const logout = async () => {
-  // Call backend logout endpoint if needed
-  return Promise.resolve();
+export const logout = async (token) => {
+  return await api.post('/logout', {}, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 };

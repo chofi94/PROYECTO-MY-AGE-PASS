@@ -1,8 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { User, Shield, FileCheck, Settings, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { 
+  User, 
+  Shield, 
+  FileCheck, 
+  Settings, 
+  CheckCircle, 
+  Clock, 
+  XCircle, 
+  Building2, 
+  MapPin, 
+  Fingerprint 
+} from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/Card';
@@ -29,7 +39,7 @@ const UserDashboard = () => {
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to load verification history',
+        description: 'Error al cargar el historial de operaciones',
         variant: 'destructive',
       });
     } finally {
@@ -53,28 +63,28 @@ const UserDashboard = () => {
   const quickActions = [
     {
       icon: Shield,
-      title: 'Verify ID',
-      description: 'Start new verification',
-      action: () => toast({ description: '🚧 This feature isn\'t implemented yet—but don\'t worry! You can request it in your next prompt! 🚀' })
+      title: 'Verificar ID',
+      description: 'Iniciar nueva verificación',
+      action: () => toast({ description: '🚧 Característica en desarrollo.' })
     },
     {
       icon: FileCheck,
-      title: 'View Documents',
-      description: 'Access your documents',
-      action: () => toast({ description: '🚧 This feature isn\'t implemented yet—but don\'t worry! You can request it in your next prompt! 🚀' })
+      title: 'Documentos',
+      description: 'Acceder a tus archivos',
+      action: () => toast({ description: '🚧 Característica en desarrollo.' })
     },
     {
       icon: Settings,
-      title: 'Settings',
-      description: 'Manage your account',
-      action: () => toast({ description: '🚧 This feature isn\'t implemented yet—but don\'t worry! You can request it in your next prompt! 🚀' })
+      title: 'Configuración',
+      description: 'Gestionar cuenta',
+      action: () => toast({ description: '🚧 Característica en desarrollo.' })
     }
   ];
 
   return (
     <>
       <Helmet>
-        <title>Dashboard - SecureVerify</title>
+        <title>Dashboard - My Age Pass</title>
         <meta name="description" content="Manage your identity verifications and account settings" />
       </Helmet>
 
@@ -83,6 +93,7 @@ const UserDashboard = () => {
 
         <main className="flex-1 pt-24 pb-12 px-4">
           <div className="container mx-auto max-w-6xl">
+            
             {/* Welcome Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -90,14 +101,14 @@ const UserDashboard = () => {
               className="mb-8"
             >
               <h1 className="text-4xl font-bold text-white mb-2">
-                Welcome back, {user?.name}!
+                ¡Bienvenido, {user?.name.split(' ')[0]}!
               </h1>
               <p className="text-slate-400">
-                Manage your verifications and account settings
+                Panel de control de <span className="text-blue-400 font-semibold">{user?.company?.name || 'la empresa'}</span>
               </p>
             </motion.div>
 
-            {/* Profile Card */}
+            {/* Profile & Company Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -105,42 +116,49 @@ const UserDashboard = () => {
               className="mb-8"
             >
               <Card>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center">
-                    <User className="w-8 h-8 text-blue-500" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">{user?.name}</h2>
-                    <p className="text-slate-400">{user?.email}</p>
-                  </div>
-                </div>
-                
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="bg-slate-700/50 rounded-lg p-4">
-                    <p className="text-slate-400 text-sm mb-1">Estado</p>
-                    <div className="flex items-center gap-2">
-                      {user?.verified ? (
-                        <>
-                          <CheckCircle className="w-5 h-5 text-green-500" />
-                          <span className="text-white font-semibold">Verified</span>
-                        </>
-                      ) : (
-                        <>
-                          <Clock className="w-5 h-5 text-yellow-500" />
-                          <span className="text-white font-semibold">Pending</span>
-                        </>
-                      )}
+                <div className="flex flex-col lg:flex-row justify-between gap-8">
+                  {/* User Basic Info */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                      <User className="w-10 h-10 text-blue-500" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-white">{user?.name}</h2>
+                      <p className="text-slate-400">{user?.email}</p>
+                      <div className="flex gap-2 mt-2">
+                        <span className="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 uppercase">
+                          {user?.role || 'Cliente'}
+                        </span>
+                        <span className="px-2 py-1 rounded text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20 uppercase flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Activo
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="bg-slate-700/50 rounded-lg p-4">
-                    <p className="text-slate-400 text-sm mb-1">Account Type</p>
-                    <span className="text-white font-semibold capitalize">{user?.role}</span>
-                  </div>
-                  
-                  <div className="bg-slate-700/50 rounded-lg p-4">
-                    <p className="text-slate-400 text-sm mb-1">Member Since</p>
-                    <span className="text-white font-semibold">Jan 2024</span>
+
+                  {/* Detailed Company Info (Nuevos campos del Registro) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 max-w-2xl bg-slate-800/30 p-5 rounded-2xl border border-slate-700/50">
+                    <div className="flex items-start gap-3">
+                      <Building2 className="w-5 h-5 text-blue-400 mt-1" />
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Razón Social</p>
+                        <p className="text-sm text-slate-200 font-medium">{user?.company?.name || 'Cargando...'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Fingerprint className="w-5 h-5 text-blue-400 mt-1" />
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">CIF / NIF</p>
+                        <p className="text-sm text-slate-200 font-medium">{user?.company?.cif || 'No disponible'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 md:col-span-2 border-t border-slate-700/50 pt-3">
+                      <MapPin className="w-5 h-5 text-blue-400 mt-1" />
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Dirección Fiscal</p>
+                        <p className="text-sm text-slate-200 font-medium">{user?.company?.address || 'Sin dirección registrada'}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -153,11 +171,11 @@ const UserDashboard = () => {
               transition={{ delay: 0.2 }}
               className="mb-8"
             >
-              <h2 className="text-2xl font-bold text-white mb-4">Quick Actions</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">Acciones rápidas</h2>
               <div className="grid md:grid-cols-3 gap-6">
                 {quickActions.map((action, index) => (
-                  <Card key={index} className="cursor-pointer" onClick={action.action}>
-                    <action.icon className="w-10 h-10 text-blue-500 mb-4" />
+                  <Card key={index} className="cursor-pointer hover:border-blue-500/50 transition-all group" onClick={action.action}>
+                    <action.icon className="w-10 h-10 text-blue-500 mb-4 group-hover:scale-110 transition-transform" />
                     <h3 className="text-xl font-semibold text-white mb-2">
                       {action.title}
                     </h3>
@@ -179,7 +197,7 @@ const UserDashboard = () => {
                   <div className="py-12 flex justify-center">
                     <LoadingSpinner />
                   </div>
-                ) : (
+                ) : verificationHistory.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
@@ -190,22 +208,35 @@ const UserDashboard = () => {
                           <th className="text-left py-3 px-4 text-slate-400 font-medium">Fecha</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="divide-y divide-slate-700/50">
                         {verificationHistory.map((item) => (
-                          <tr key={item.id} className="border-b border-slate-700/50 hover:bg-slate-700/30 transition-colors">
-                            <td className="py-4 px-4 text-white">{item.type}</td>
-                            <td className="py-4 px-4 text-slate-300">{item.document}</td>
+                          <tr key={item.id} className="hover:bg-slate-700/30 transition-colors">
+                            <td className="py-4 px-4 text-white font-medium">{item.type}</td>
+                            <td className="py-4 px-4 text-slate-300">{item.document || 'N/A'}</td>
                             <td className="py-4 px-4">
                               <div className="flex items-center gap-2">
                                 {getStatusIcon(item.status)}
-                                <span className="text-white capitalize">{item.status}</span>
+                                <span className="text-white capitalize text-sm">{item.status}</span>
                               </div>
                             </td>
-                            <td className="py-4 px-4 text-slate-400">{item.date}</td>
+                            {/* Formateamos la fecha para que sea legible */}
+                            <td className="py-4 px-4 text-slate-400 text-sm">
+                              {item.date ? new Date(item.date).toLocaleDateString('es-ES', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              }) : '---'}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                ) : (
+                  <div className="py-12 text-center">
+                    <p className="text-slate-400 text-lg">No hay operaciones registradas todavía.</p>
                   </div>
                 )}
               </Card>
